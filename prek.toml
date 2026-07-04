@@ -16,7 +16,8 @@ hooks = [
 repo = "local"
 hooks = [
     { id = "go-mod-tidy", name = "go mod tidy", entry = "go mod tidy", language = "system", files = "\\.go$", pass_filenames = false },
-    { id = "add-license-headers", name = "addlicense", entry = "addlicense -v -l apache -c \"Joseph King\" -y 2026", language = "golang", additional_dependencies = ["github.com/google/addlicense@latest"], files = "\\.go$" }
+    { id = "add-license-headers", name = "addlicense", entry = "addlicense -v -l apache -c \"Joseph King\" -y 2026", language = "golang", additional_dependencies = ["github.com/google/addlicense@latest"], files = "\\.go$" },
+    { id = "go-test", name = "go test", entry = "go test -race -short ./...", language = "system", files = "\\.go$", pass_filenames = false }
 ]
 
 [[repos]]
