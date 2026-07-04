@@ -16,7 +16,7 @@ package ai
 
 import "context"
 
-// Provider defines the capabilities any LLM backend must have to work with Fathom.
+// Provider defines the capabilities any LLM backend must have to work with Sonde.
 type Provider interface {
 	// Summary takes a raw wall of logs and returns a human-readable analysis.
 	Summary(ctx context.Context, logs string) (string, error)

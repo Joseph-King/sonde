@@ -29,7 +29,7 @@ import (
 var LastCmd = &cobra.Command{
 	Use:   "last",
 	Short: "Analyze the most recent terminal output or piped logs",
-	Long:  `Fathom attempts to capture your last terminal buffer, then sends it to your AI provider for analysis.`,
+	Long:  `Sonde attempts to capture your last terminal buffer, then sends it to your AI provider for analysis.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		var logs string
 		var err error
@@ -37,7 +37,7 @@ var LastCmd = &cobra.Command{
 		logs, err = captureTerminalBuffer()
 
 		if err != nil {
-			return fmt.Errorf("could not automatically capture terminal: %w. Try piping your command: 'cmd | fathom'", err)
+			return fmt.Errorf("could not automatically capture terminal: %w. Try piping your command: 'cmd | sonde'", err)
 		}
 
 		if logs == "" {
@@ -60,7 +60,6 @@ var LastCmd = &cobra.Command{
 
 func captureTerminalBuffer() (string, error) {
 	// TO DO add tmux/xclip/wl-clipboard if applicable
-
 	shell := os.Getenv("SHELL")
 
 	lastCmd, err := getLastCommand(shell)
@@ -68,6 +67,10 @@ func captureTerminalBuffer() (string, error) {
 		return "", err
 	} else if lastCmd == "" {
 		return "", nil
+	}
+
+	if strings.Contains(lastCmd, "sonde") {
+		return "", fmt.Errorf("previous command includes sonde, terminating to prevent issues: %s", lastCmd)
 	}
 
 	output, err := runLastCommand(shell, lastCmd)
@@ -116,6 +119,10 @@ func getLastBash() (string, error) {
 		return "", fmt.Errorf("no commands found in bash history")
 	}
 
+	if strings.HasPrefix(lastCommand, "bash -c") {
+		lastCommand = strings.TrimPrefix(lastCommand, "bash -c ")
+	}
+
 	return lastCommand, nil
 }
 
@@ -132,6 +139,10 @@ func getLastZsh() (string, error) {
 		return "", fmt.Errorf("no commands found in zsh history")
 	}
 
+	if strings.HasPrefix(lastCommand, "zsh -c") {
+		lastCommand = strings.TrimPrefix(lastCommand, "zsh -c ")
+	}
+
 	return lastCommand, nil
 }
 
@@ -146,6 +157,10 @@ func getLastFish() (string, error) {
 	lastCommand := strings.TrimSpace(string(output))
 	if len(lastCommand) == 0 {
 		return "", fmt.Errorf("no commands found in fish history")
+	}
+
+	if strings.HasPrefix(lastCommand, "fish -c") {
+		lastCommand = strings.TrimPrefix(lastCommand, "fish -c ")
 	}
 
 	return lastCommand, nil

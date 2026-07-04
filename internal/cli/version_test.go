@@ -29,7 +29,7 @@ func TestFormatVersionString(t *testing.T) {
 	date := "2026-07-04"
 
 	// 2. Call the logic you want to test (adjust this to match your structural logic)
-	result := fmt.Sprintf("fathom %s (commit: %s, built: %s)", version, commit, date)
+	result := fmt.Sprintf("sonde %s (commit: %s, built: %s)", version, commit, date)
 
 	// 3. Assertions
 	if !strings.Contains(result, "v0.1.0-alpha") {

@@ -1,4 +1,4 @@
-module github.com/Joseph-King/fathom
+module github.com/Joseph-King/sonde
 
 go 1.26.4
 

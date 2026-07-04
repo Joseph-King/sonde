@@ -4,6 +4,10 @@ gitleaks = "v8.18.4"
 "cargo:prek" = "latest"
 "go:github.com/google/addlicense" = "latest"
 
+bash = "5.2"
+zsh = "5.9"
+fish = "3.7"
+
 [tasks.init]
 description = "Install tools, hook up hooks, and prepare environment"
 run = """
@@ -12,13 +16,13 @@ go mod tidy
 """
 
 [tasks.build]
-description = "Compile fathom binary with version metadata"
+description = "Compile sonde binary with version metadata"
 run = """
 VERSION="v0.1.0-alpha"
 COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "none")
 DATE=$(date -u +%Y-%m-%d)
 
-go build -ldflags "-X github.com/Joseph-King/fathom/internal/cli.Version=${VERSION} -X github.com/Joseph-King/fathom/internal/cli.CommitSHA=${COMMIT} -X github.com/Joseph-King/fathom/internal/cli.BuildDate=${DATE}" -o build/fathom ./main.go
+go build -ldflags "-X github.com/Joseph-King/sonde/internal/cli.Version=${VERSION} -X github.com/Joseph-King/sonde/internal/cli.CommitSHA=${COMMIT} -X github.com/Joseph-King/sonde/internal/cli.BuildDate=${DATE}" -o build/sonde ./main.go
 """
 
 [tasks.prek]

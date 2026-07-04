@@ -14,7 +14,7 @@
 
 package main
 
-import "github.com/Joseph-King/fathom/internal/cli"
+import "github.com/Joseph-King/sonde/internal/cli"
 
 func main() {
 	// Execute reads the CLI flags, checks for pipes, and kicks off the tool

@@ -30,9 +30,9 @@ var (
 var VersionCmd = &cobra.Command{
 	Use:     "version",
 	Aliases: []string{"v"},
-	Short:   "Print the build version and architecture information for Fathom",
+	Short:   "Print the build version and architecture information for sonde",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("Fathom Analyzer %s\n", Version)
+		fmt.Printf("sonde Analyzer %s\n", Version)
 		fmt.Printf("Commit: %s\n", CommitSHA)
 		fmt.Printf("Build Date: %s\n", BuildDate)
 	},

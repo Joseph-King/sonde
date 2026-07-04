@@ -25,13 +25,13 @@ import (
 )
 
 var RootCmd = &cobra.Command{
-	Use:   "fathom",
-	Short: "Fathom: AI-powered terminal and container log analyzer",
-	Long:  `Fathom is a CLI tool that uses AI to analyze terminal and container logs.`,
+	Use:   "sonde",
+	Short: "Sonde: AI-powered terminal and container log analyzer",
+	Long:  `Sonde is a CLI tool that uses AI to analyze terminal and container logs.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// Check if data is being piped into the root command
 		if isStdinNotEmpty() {
-			// Data is piped! E.g., "cat error.log | fathom"
+			// Data is piped! E.g., "cat error.log | sonde"
 			logs, err := readStdin()
 			if err != nil {
 				return fmt.Errorf("failed to read piped logs: %w", err)
