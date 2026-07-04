@@ -1,6 +1,6 @@
 [tools]
 go = "1.26.4"
-node = "24.18.0"
+gitleaks = "v8.18.4"
 "cargo:prek" = "latest"
 
 [plugins]
@@ -9,7 +9,6 @@ node = "24.18.0"
 [tasks.init]
 description = "Install tools, hook up hooks, and prepare environment"
 run = """
-npm install -g commitizen cz-conventional-changelog
 prek install
 go mod tidy
 """
