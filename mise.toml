@@ -4,9 +4,6 @@ gitleaks = "v8.18.4"
 "cargo:prek" = "latest"
 "go:github.com/google/addlicense" = "latest"
 
-[plugins]
-# Ensures any custom environment variables or path updates are managed natively
-
 [tasks.init]
 description = "Install tools, hook up hooks, and prepare environment"
 run = """
