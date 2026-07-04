@@ -1,2 +1,25 @@
+[tools]
 go = "1.26.4"
-prek = "latest"
+node = "24.18.0"
+"cargo:prek" = "latest"
+
+[plugins]
+# Ensures any custom environment variables or path updates are managed natively
+
+[tasks.init]
+description = "Install tools, hook up hooks, and prepare environment"
+run = """
+npm install -g commitizen cz-conventional-changelog
+prek install
+go mod tidy
+"""
+
+[tasks.build]
+description = "Compile fathom binary with version metadata"
+run = """
+VERSION="v0.1.0-alpha"
+COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "none")
+DATE=$(date -u +%Y-%m-%d)
+
+go build -ldflags "-X github.com/Joseph-King/fathom/internal/cli.Version=${VERSION} -X github.com/Joseph-King/fathom/internal/cli.CommitSHA=${COMMIT} -X github.com/Joseph-King/fathom/internal/cli.BuildDate=${DATE}" -o build/fathom ./cmd/main.go
+"""

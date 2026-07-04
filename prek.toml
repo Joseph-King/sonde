@@ -1,0 +1,29 @@
+# Global settings for pre-commit tracking
+minimum_prek_version = "0.1.0"
+
+[[repos]]
+# Standard, ultra-fast structural checks
+repo = "https://github.com/pre-commit/pre-commit-hooks"
+rev = "v4.6.0"
+hooks = [
+    { id = "trailing-whitespace" },
+    { id = "end-of-file-fixer" },
+    { id = "check-yaml" },
+    { id = "check-toml" }
+]
+
+[[repos]]
+# Native formatting and code-quality checks for your Go modules
+repo = "https://github.com/golangci/golangci-lint"
+rev = "v2.12.2"  # Upgrade from v1.59.1 to v2.x
+hooks = [
+    { id = "golangci-lint", name = "golangci-lint", entry = "golangci-lint run" }
+]
+
+[[repos]]
+# Enforce Conventional Commits right at git commit time
+repo = "https://github.com/alessandrojcm/commitlint-pre-commit-hook"
+rev = "v9.16.0"
+hooks = [
+    { id = "commitlint", stages = ["commit-msg"] }
+]

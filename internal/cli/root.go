@@ -79,6 +79,7 @@ func truncateLogs(logs string, maxLines int) string {
 func Execute() {
 	// Register subcommands
 	RootCmd.AddCommand(LastCmd)
+	RootCmd.AddCommand(VersionCmd)
 
 	if err := RootCmd.Execute(); err != nil {
 		os.Exit(1)

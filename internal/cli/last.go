@@ -66,7 +66,7 @@ func captureTerminalBuffer() (string, error) {
 func runLastCommand(shell, cmd string) (string, error) {
 	// Prompt the user to confirm
 	reader := bufio.NewReader(os.Stdin)
-	io.WriteString(os.Stdout, fmt.Sprintf("Would you like to re-execute and capture the following command:\n%s\n? (y/N): ", cmd))
+	_, _ = io.WriteString(os.Stdout, fmt.Sprintf("Would you like to re-execute and capture the following command:\n%s\n? (y/N): ", cmd))
 	response, err := reader.ReadString('\n')
 
 	if err != nil {
@@ -79,7 +79,6 @@ func runLastCommand(shell, cmd string) (string, error) {
 	}
 
 	// Execute the command and capture its output
-	fmt.Println("Executing:", shell, "-c", cmd)
 	fullCmd := exec.Command(shell, "-c", cmd)
 	output, err := fullCmd.CombinedOutput()
 
