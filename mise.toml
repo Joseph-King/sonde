@@ -21,7 +21,7 @@ VERSION="v0.1.0-alpha"
 COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "none")
 DATE=$(date -u +%Y-%m-%d)
 
-go build -ldflags "-X github.com/Joseph-King/fathom/internal/cli.Version=${VERSION} -X github.com/Joseph-King/fathom/internal/cli.CommitSHA=${COMMIT} -X github.com/Joseph-King/fathom/internal/cli.BuildDate=${DATE}" -o build/fathom ./cmd/main.go
+go build -ldflags "-X github.com/Joseph-King/fathom/internal/cli.Version=${VERSION} -X github.com/Joseph-King/fathom/internal/cli.CommitSHA=${COMMIT} -X github.com/Joseph-King/fathom/internal/cli.BuildDate=${DATE}" -o build/fathom ./main.go
 """
 
 [tasks.prek]
