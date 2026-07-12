@@ -8,18 +8,11 @@ gitleaks = "v8.18.4"
 description = "Install tools, hook up hooks, and prepare environment"
 run = """
 prek install
+
+cd cli
 go mod tidy
 """
 
-[tasks.build]
-description = "Compile sonde binary with version metadata"
-run = """
-VERSION="v0.1.0-alpha"
-COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "none")
-DATE=$(date -u +%Y-%m-%d)
-
-go build -ldflags "-X github.com/Joseph-King/sonde/cli/cmd.Version=${VERSION} -X github.com/Joseph-King/sonde/cli/cmd.CommitSHA=${COMMIT} -X github.com/Joseph-King/sonde/cli/cmd.BuildDate=${DATE}" -o build/sonde ./main.go
-"""
 
 [tasks.prek]
 description = "Clean prek then run --all-files"
@@ -28,8 +21,23 @@ prek clean
 prek run --all-files
 """
 
+[tasks.build]
+description = "Compile sonde binary with version metadata"
+run = """
+VERSION="v0.1.0-alpha"
+
+cd cli
+go build -cover -coverpkg=./... -ldflags "-X github.com/Joseph-King/sonde/cli/cmd.Version=${VERSION} -X github.com/Joseph-King/sonde/cli/cmd.CommitSHA=${COMMIT} -X github.com/Joseph-King/sonde/cli/cmd.BuildDate=${DATE}" -o build/sonde ./main.go
+"""
+
 [tasks.test]
 description = "Run tests"
+depends = ["build"]
 run = """
-go test -v -race -cover ./...
+mkdir -p /tmp/sonde-coverage
+rm -rf /tmp/sonde-coverage/*
+
+cd cli
+GOCOVERDIR=/tmp/sonde-coverage VERSION="v0.1.0-alpha" go test -v -race ./...
+go tool covdata percent -i=/tmp/sonde-coverage
 """

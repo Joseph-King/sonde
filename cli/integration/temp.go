@@ -12,99 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cli
+package integration
 
 import (
-	"bufio"
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 	"strings"
-
-	"github.com/spf13/cobra"
 )
-
-func lastCmd(ctx *CommandContext) *cobra.Command {
-	return &cobra.Command{
-		Use:   "last",
-		Short: "Analyze the most recent terminal output",
-		Long:  `Sonde attempts to capture your last terminal buffer, then sends it to your AI provider for analysis.`,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			var logs string
-			var err error
-
-			logs, err = captureTerminalBuffer()
-
-			if err != nil {
-				return fmt.Errorf("could not automatically capture terminal: %w. Try piping your command: 'cmd | sonde'", err)
-			}
-
-			if logs == "" {
-				fmt.Println("Nothing captured... exiting")
-				return nil
-			}
-
-			if strings.TrimSpace(logs) == "" {
-				return fmt.Errorf("captured logs are empty")
-			}
-
-			// Print a snippet of what we caught for verification
-			ctx.setData(truncateLogs(logs, 10))
-			ctx.setSource("terminal_history")
-
-			return nil
-		},
-	}
-}
-
-func captureTerminalBuffer() (string, error) {
-	// TO DO add tmux/xclip/wl-clipboard if applicable
-	shell := os.Getenv("SHELL")
-
-	lastCmd, err := getLastCommand(shell, 2)
-	if err != nil {
-		return "", err
-	} else if lastCmd == "" {
-		return "", nil
-	}
-
-	if strings.Contains(lastCmd, "sonde") {
-		return "", fmt.Errorf("previous command includes sonde, terminating to prevent issues: %s", lastCmd)
-	}
-
-	output, err := runLastCommand(shell, lastCmd)
-	if err != nil {
-		return "", err
-	}
-	return strings.Join([]string{"command: " + lastCmd, "output: " + output}, "\n"), nil
-}
-
-func runLastCommand(shell, cmd string) (string, error) {
-	// Prompt the user to confirm
-	reader := bufio.NewReader(os.Stdin)
-	_, _ = io.WriteString(os.Stdout, fmt.Sprintf("Would you like to re-execute and capture the following command:\n%s\n? (y/N): ", cmd))
-	response, err := reader.ReadString('\n')
-
-	if err != nil {
-		return "", fmt.Errorf("failed to read response: %w", err)
-	}
-
-	response = strings.TrimSpace(response)
-	if response != "y" && response != "Y" {
-		return "", nil
-	}
-
-	// Execute the command and capture its output
-	fullCmd := exec.Command(shell, "-c", cmd)
-	output, err := fullCmd.CombinedOutput()
-
-	if err != nil {
-		return "", fmt.Errorf("failed to execute command: %w", err)
-	}
-
-	return string(output), nil
-}
 
 func getLastBash(howFar int) (string, error) {
 	cmd := exec.Command("bash", "-c", "history", fmt.Sprintf("-%d", howFar))

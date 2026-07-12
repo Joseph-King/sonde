@@ -1,4 +1,4 @@
-module github.com/Joseph-King/sonde
+module github.com/Joseph-King/sonde/cli
 
 go 1.26.4
 

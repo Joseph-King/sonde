@@ -12,28 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cli
+package integration
 
 import (
-	"fmt"
-
-	"github.com/spf13/cobra"
+	"os"
+	"os/exec"
+	"strings"
+	"testing"
 )
 
-// These variables are populated at build time using -ldflags
-var (
-	Version = "dev"
-)
+func TestVersion(t *testing.T) {
+	cmd := exec.Command("../build/sonde", "version")
+	cmd.Env = os.Environ()
 
-var VersionCmd = &cobra.Command{
-	Use:     "version",
-	Aliases: []string{"v"},
-	Short:   "Print the build version",
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("%s\n", Version)
-	},
-}
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		t.Fatalf("cmd.CombinedOutput() failed: %v", err)
+	}
 
-func init() {
-	RootCmd.AddCommand(VersionCmd)
+	expectedOutput := os.Getenv("VERSION")
+	if strings.TrimSpace(string(output)) != expectedOutput {
+		t.Errorf("Expected output to be %s, got: %s", expectedOutput, string(output))
+	}
 }
